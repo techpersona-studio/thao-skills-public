@@ -6,11 +6,11 @@
     {
       "name": "engineering-skills",
       "source": "./plugins/engineering-skills",
-      "description": "General engineering skill pack: code review, TDD, architecture, prototyping, and research skills (Matt Pocock pack + design + misc)."
+      "description": "Design + architecture skill pack: high-end visual design, image-to-code, diagramming, and codebase-architecture review."
     },
     {
-      "name": "tp-workflow",
-      "source": "./plugins/tp-workflow",
+      "name": "tp-skill",
+      "source": "./plugins/tp-skill",
       "description": "Thao's personal workflow skills: daily planning, close-clear, strategic zoom-outs, and related habits."
     }
   ]

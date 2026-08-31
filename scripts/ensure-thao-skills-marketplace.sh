@@ -1,8 +1,10 @@
 #!/bin/bash
 # SessionStart hook (cloud sessions only): registers the thao-skills plugin
-# marketplace and installs its 3 plugins. Runs after Claude Code launches, so
-# the GitHub auth proxy is already connected — unlike an environment setup
-# script, which runs BEFORE the proxy connects and can't clone a private repo.
+# marketplace and installs the tp-skill plugin. engineering-skills is
+# deliberately NOT auto-installed here -- opt-in only, same treatment as SEO
+# (see README). Runs after Claude Code launches, so the GitHub auth proxy is
+# already connected -- unlike an environment setup script, which runs BEFORE
+# the proxy connects and can't clone a private repo.
 # Idempotent: skips anything already done, so a repeat session in a warm
 # environment adds negligible startup time.
 
@@ -14,10 +16,8 @@ if ! claude plugin marketplace list 2>/dev/null | grep -q "thao-skills-public"; 
   claude plugin marketplace add techpersona-studio/thao-skills-public 2>&1 || true
 fi
 
-for p in engineering-skills tp-workflow; do
-  if ! claude plugin list 2>/dev/null | grep -q "$p@thao-skills-public"; then
-    claude plugin install "$p@thao-skills-public" --scope user 2>&1 || true
-  fi
-done
+if ! claude plugin list 2>/dev/null | grep -q "tp-skill@thao-skills-public"; then
+  claude plugin install "tp-skill@thao-skills-public" --scope user 2>&1 || true
+fi
 
 exit 0

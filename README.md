@@ -29,17 +29,24 @@ one" cycle. Anyone can:
 
 ```
 /plugin marketplace add techpersona-studio/thao-skills-public
-/plugin install engineering-skills@thao-skills-public
-/plugin install tp-workflow@thao-skills-public
+/plugin install tp-skill@thao-skills-public
 ```
 
-All 20 skills are grouped into 2 plugins (so invocation is `/tp-workflow:tp-start-strong`, not one
+Only `tp-skill` is meant to auto-load on every session (see the SessionStart hook in
+`.claude/settings.json` of this and other repos). `engineering-skills` is opt-in — install it
+separately when a project actually needs it:
+
+```
+/plugin install engineering-skills@thao-skills-public
+```
+
+All 14 skills are grouped into 2 plugins (so invocation is `/tp-skill:tp-start-strong`, not one
 plugin per skill):
 
-| Plugin | Skills |
-|---|---|
-| `engineering-skills` | `matt-improve-codebase-architecture`, the 6 unprefixed Matt-pack skills, design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`) |
-| `tp-workflow` | Thao's personal `tp-*` skills (daily planning, close-clear, strategic zoom-outs, communication style, etc.) — the referenced Google Drive vault paths are Thao's, not yours |
+| Plugin | Skills | Auto-loads? |
+|---|---|---|
+| `tp-skill` | Thao's personal `tp-*` skills (daily planning, close-clear, strategic zoom-outs, communication style, etc.) — the referenced Google Drive vault paths are Thao's, not yours | **Yes**, via SessionStart hook |
+| `engineering-skills` | `matt-improve-codebase-architecture`, plus design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`) | No — opt-in |
 
 **No SEO plugin here** — see "SEO skills" below for why, and what to install instead.
 
@@ -52,7 +59,7 @@ re-upload, no delete-then-reinstall.
 to the real top-level `<name>/SKILL.md` directories (never copies), rebuilt by
 `bin/build-marketplace.sh`. See "Adding a new skill" below.
 
-## What's here (20 skills)
+## What's here (14 skills)
 
 Naming convention: **`matt-*`** = from Matt Pocock's engineering-skills pack, **`tp-*`** =
 written by Thao. Unprefixed = third-party pack (design).
@@ -61,7 +68,6 @@ written by Thao. Unprefixed = third-party pack (design).
 |---|---|
 | Design (3) | high-end-visual-design, image-to-code, excalidraw-diagram |
 | Matt Pocock pack, prefixed (1) | matt-improve-codebase-architecture — the only one of the 13 still in regular use |
-| Matt Pocock pack, **left unprefixed on purpose** (6) | codebase-design, diagnosing-bugs, domain-modeling, grilling, implement, tdd — see note below |
 | Thao-authored, prefixed (10) | tp-building-automation-prompts, tp-close-clear, tp-codebase-walkthrough, tp-eli5, tp-import-artifacts, tp-list-skills, tp-north-star, tp-start-strong, tp-update-brain, tp-youtube-transcript |
 
 ### SEO skills
@@ -84,12 +90,6 @@ under `extraKnownMarketplaces` (see `seo-os`'s for a working example) — that r
 marketplace automatically without installing anything, so `/plugin install claude-seo@...` above
 is the only manual step left.
 
-### Why 6 Matt-pack skills stay unprefixed
-
-`codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grilling`, `implement`, `tdd` are
-called **by exact bare name** from `hive-*` skills owned by a separate private repo. Renaming
-them here would silently break those. Leave these 6 bare.
-
 ## What's NOT here
 
 - **Work-specific tooling** — anything tied to a private employer's Jira ticket conventions, CI
@@ -97,6 +97,12 @@ them here would silently break those. Leave these 6 bare.
   never committed here.
 - **`hive-*` skills** — owned by a separate private repo, with its own sync flow. Gitignored
   here, never tracked.
+- **The 6 unprefixed Matt-pack skills** (`codebase-design`, `diagnosing-bugs`, `domain-modeling`,
+  `grilling`, `implement`, `tdd`), removed 2026-08-31 — turns out `hive-testbed`'s own skills
+  don't vendor these themselves; they depend on the *private* `thao-skills` repo supplying them
+  locally (`hive-builder` wraps `/tdd`, `hive-architect` calls `/grilling` + `/domain-modeling`,
+  etc.). That dependency lives only on your machine via the private repo's local install, so there
+  was no reason to carry copies here too. Kept in `thao-skills`, not archived.
 - **17 skills cut 2026-08-31** after a usage review (mirrors the same cut in the private
   `thao-skills` repo): 12 rarely-used Matt Pocock skills (kept `matt-improve-codebase-architecture`
   — most of what was useful in the rest has been absorbed into the hive-flow workflow),
@@ -112,8 +118,9 @@ Drop a `<name>/SKILL.md` directory in here, then run both:
 
 - `bin/install.sh` — picks it up in `~/.claude/skills` (and Codex/Cursor) on this machine.
 - `bin/build-marketplace.sh` — regenerates `plugins/*/skills/*` so it's included in the plugin
-  marketplace (see above). Classifies by prefix (`tp-*`, `matt-*`, or the known
-  unprefixed set); a name it doesn't recognize prints a warning instead of silently dropping it. `seo-*` is a deliberate no-op — see "SEO skills" above.
+  marketplace (see above). Classifies by prefix (`tp-*`, or the 4 named `engineering-skills`
+  members); a name it doesn't recognize prints a warning instead of silently dropping it. `seo-*`
+  is a deliberate no-op — see "SEO skills" above.
 
 Commit and push both the new skill and the regenerated `plugins/` directory.
 

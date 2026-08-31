@@ -69,7 +69,7 @@ done
 
 cat > .claude-plugin/marketplace.json <<'EOF'
 {
-  "name": "thao-skills",
+  "name": "thao-skills-public",
   "owner": { "name": "Thao", "email": "techpersonastudio@gmail.com" },
   "description": "Thao's personal + team Claude Code skill packs, grouped into plugins.",
   "plugins": [

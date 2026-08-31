@@ -4,11 +4,6 @@
   "description": "Thao's personal + team Claude Code skill packs, grouped into plugins.",
   "plugins": [
     {
-      "name": "seo-skills",
-      "source": "./plugins/seo-skills",
-      "description": "SEO skill pack: technical audits, content, GEO/AI-search surface, schema, backlinks, keyword/competitor tooling."
-    },
-    {
       "name": "engineering-skills",
       "source": "./plugins/engineering-skills",
       "description": "General engineering skill pack: code review, TDD, architecture, prototyping, and research skills (Matt Pocock pack + design + misc)."

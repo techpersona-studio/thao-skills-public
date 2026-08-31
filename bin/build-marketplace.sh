@@ -15,7 +15,6 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_DIR"
 
 declare -A CATEGORY_DESC=(
-  [seo-skills]="SEO skill pack: technical audits, content, GEO/AI-search surface, schema, backlinks, keyword/competitor tooling."
   [engineering-skills]="General engineering skill pack: code review, TDD, architecture, prototyping, and research skills (Matt Pocock pack + design + misc)."
   [tp-workflow]="Thao's personal workflow skills: daily planning, close-clear, strategic zoom-outs, and related habits."
 )
@@ -23,7 +22,7 @@ declare -A CATEGORY_DESC=(
 classify() {
   local name="$1"
   case "$name" in
-    seo|seo-*) echo "seo-skills" ;;
+    seo|seo-*) echo "" ;;  # not vendored -- point to AgriciDaniel/claude-seo directly, see README
     tp-*) echo "tp-workflow" ;;
     matt-*|codebase-design|diagnosing-bugs|domain-modeling|grilling|implement|tdd|high-end-visual-design|image-to-code|excalidraw-diagram|find-skills)
       echo "engineering-skills" ;;
@@ -73,11 +72,6 @@ cat > .claude-plugin/marketplace.json <<'EOF'
   "owner": { "name": "Thao", "email": "techpersonastudio@gmail.com" },
   "description": "Thao's personal + team Claude Code skill packs, grouped into plugins.",
   "plugins": [
-    {
-      "name": "seo-skills",
-      "source": "./plugins/seo-skills",
-      "description": "SEO skill pack: technical audits, content, GEO/AI-search surface, schema, backlinks, keyword/competitor tooling."
-    },
     {
       "name": "engineering-skills",
       "source": "./plugins/engineering-skills",

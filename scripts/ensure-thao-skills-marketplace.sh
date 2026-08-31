@@ -10,13 +10,13 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
-if ! claude plugin marketplace list 2>/dev/null | grep -q "thao-skills"; then
-  claude plugin marketplace add techpersona-studio/thao-skills 2>&1 || true
+if ! claude plugin marketplace list 2>/dev/null | grep -q "thao-skills-public"; then
+  claude plugin marketplace add techpersona-studio/thao-skills-public 2>&1 || true
 fi
 
-for p in seo-skills engineering-skills tp-workflow; do
-  if ! claude plugin list 2>/dev/null | grep -q "$p@thao-skills"; then
-    claude plugin install "$p@thao-skills" --scope user 2>&1 || true
+for p in engineering-skills tp-workflow; do
+  if ! claude plugin list 2>/dev/null | grep -q "$p@thao-skills-public"; then
+    claude plugin install "$p@thao-skills-public" --scope user 2>&1 || true
   fi
 done
 

@@ -29,41 +29,60 @@ one" cycle. Anyone can:
 
 ```
 /plugin marketplace add techpersona-studio/thao-skills-public
-/plugin install seo-skills@thao-skills-public
 /plugin install engineering-skills@thao-skills-public
 /plugin install tp-workflow@thao-skills-public
 ```
 
-All 52 skills are grouped into 3 plugins (so invocation is `/seo-skills:seo-audit`, not one
+All 20 skills are grouped into 2 plugins (so invocation is `/tp-workflow:tp-start-strong`, not one
 plugin per skill):
 
 | Plugin | Skills |
 |---|---|
-| `seo-skills` | all 31 `seo*` skills |
 | `engineering-skills` | `matt-improve-codebase-architecture`, the 6 unprefixed Matt-pack skills, design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`) |
 | `tp-workflow` | Thao's personal `tp-*` skills (daily planning, close-clear, strategic zoom-outs, communication style, etc.) — the referenced Google Drive vault paths are Thao's, not yours |
+
+**No SEO plugin here** — see "SEO skills" below for why, and what to install instead.
 
 No `version` field is set anywhere in the marketplace, so Claude Code tracks the latest commit
 SHA on `main` automatically — edit a skill, commit, push, and every session that already has the
 plugin installed (local or cloud) picks it up on next use / `/plugin marketplace update`. No
 re-upload, no delete-then-reinstall.
 
-**These 3 plugins are generated, not hand-maintained** — `plugins/*/skills/*` are symlinks back
+**These 2 plugins are generated, not hand-maintained** — `plugins/*/skills/*` are symlinks back
 to the real top-level `<name>/SKILL.md` directories (never copies), rebuilt by
 `bin/build-marketplace.sh`. See "Adding a new skill" below.
 
-## What's here (51 skills)
+## What's here (20 skills)
 
 Naming convention: **`matt-*`** = from Matt Pocock's engineering-skills pack, **`tp-*`** =
-written by Thao. Unprefixed = third-party pack (SEO, design).
+written by Thao. Unprefixed = third-party pack (design).
 
 | Category | Skills |
 |---|---|
-| SEO (31) | seo, seo-ahrefs, seo-audit, seo-backlinks, seo-bing, seo-cluster, seo-competitor-pages, seo-content, seo-content-brief, seo-dataforseo, seo-drift, seo-ecommerce, seo-firecrawl, seo-flow, seo-geo, seo-google, seo-hreflang, seo-image-gen, seo-images, seo-local, seo-maps, seo-page, seo-plan, seo-profound, seo-programmatic, seo-schema, seo-seranking, seo-sitemap, seo-sxo, seo-technical, seo-unlighthouse |
 | Design (3) | high-end-visual-design, image-to-code, excalidraw-diagram |
 | Matt Pocock pack, prefixed (1) | matt-improve-codebase-architecture — the only one of the 13 still in regular use |
 | Matt Pocock pack, **left unprefixed on purpose** (6) | codebase-design, diagnosing-bugs, domain-modeling, grilling, implement, tdd — see note below |
 | Thao-authored, prefixed (10) | tp-building-automation-prompts, tp-close-clear, tp-codebase-walkthrough, tp-eli5, tp-import-artifacts, tp-list-skills, tp-north-star, tp-start-strong, tp-update-brain, tp-youtube-transcript |
+
+### SEO skills
+
+Not vendored here (removed 2026-08-31). The 31 `seo-*` skills this repo used to carry were a
+copy of [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) (MIT), pinned to an
+already-stale version (v2.2.0 vs. their current v2.2.5) that we'd have to keep manually updating.
+SEO is also project-specific, not something every session needs — so instead of paying its
+context cost (~4.4k tokens, always-on) on every session, install it directly from the source only
+on the projects that need it:
+
+```
+/plugin marketplace add AgriciDaniel/claude-seo
+/plugin install claude-seo@agricidaniel-claude-seo
+```
+
+One plugin, `claude-seo`, bundles all 25 skills + 18 sub-agents. Always current, no maintenance
+on our end. If a repo needs this every session, add it to that repo's own `.claude/settings.json`
+under `extraKnownMarketplaces` (see `seo-os`'s for a working example) — that registers the
+marketplace automatically without installing anything, so `/plugin install claude-seo@...` above
+is the only manual step left.
 
 ### Why 6 Matt-pack skills stay unprefixed
 
@@ -85,6 +104,7 @@ them here would silently break those. Leave these 6 bare.
   `tp-start-strong` / `tp-update-brain`), `find-skills` (redundant with `tp-list-skills`), and
   `tp-todo`. `tp-import-lesson` was also cut then kept after all, renamed to `tp-import-artifacts`
   to reflect a broader scope.
+- **All 31 `seo-*` skills, removed 2026-08-31** — see "SEO skills" above.
 
 ## Adding a new skill
 
@@ -92,8 +112,8 @@ Drop a `<name>/SKILL.md` directory in here, then run both:
 
 - `bin/install.sh` — picks it up in `~/.claude/skills` (and Codex/Cursor) on this machine.
 - `bin/build-marketplace.sh` — regenerates `plugins/*/skills/*` so it's included in the plugin
-  marketplace (see above). Classifies by prefix (`seo-*`, `tp-*`, `matt-*`, or the known
-  unprefixed set); a name it doesn't recognize prints a warning instead of silently dropping it.
+  marketplace (see above). Classifies by prefix (`tp-*`, `matt-*`, or the known
+  unprefixed set); a name it doesn't recognize prints a warning instead of silently dropping it. `seo-*` is a deliberate no-op — see "SEO skills" above.
 
 Commit and push both the new skill and the regenerated `plugins/` directory.
 

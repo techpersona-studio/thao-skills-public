@@ -48,7 +48,7 @@ Bucket every skill. Categories (Thao-confirmed):
 - **Debugging / review** — diagnose, systematic-debugging, code-review, code-review-jira-ticket, review, security-review, simplify, verify, verification-before-completion, receiving-code-review, requesting-code-review, improve-codebase-architecture, finishing-a-development-branch
 - **Knowledge / vault** — import-lesson, youtube-transcript, deep-research
 - **Integrations** — all Notion:*, all slack:*
-- **Meta / config** — write-a-skill, list-skills, find-skills, update-config, keybindings-help, caveman, loop, run, init, fewer-permission-prompts, using-superpowers, writing-skills
+- **Meta / config** — write-a-skill, list-skills, update-config, keybindings-help, loop, run, init, fewer-permission-prompts, using-superpowers, writing-skills
 
 New/unknown skills: place by best-fit description, note them at the bottom under "Uncategorized" if unsure.
 

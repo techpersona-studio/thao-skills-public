@@ -34,13 +34,13 @@ one" cycle. Anyone can:
 /plugin install tp-workflow@thao-skills-public
 ```
 
-All 67 skills are grouped into 3 plugins (so invocation is `/seo-skills:seo-audit`, not one
+All 52 skills are grouped into 3 plugins (so invocation is `/seo-skills:seo-audit`, not one
 plugin per skill):
 
 | Plugin | Skills |
 |---|---|
 | `seo-skills` | all 31 `seo*` skills |
-| `engineering-skills` | `matt-*` pack, the 6 unprefixed Matt-pack skills, design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`), `find-skills` |
+| `engineering-skills` | `matt-improve-codebase-architecture`, the 6 unprefixed Matt-pack skills, design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`) |
 | `tp-workflow` | Thao's personal `tp-*` skills (daily planning, close-clear, strategic zoom-outs, communication style, etc.) — the referenced Google Drive vault paths are Thao's, not yours |
 
 No `version` field is set anywhere in the marketplace, so Claude Code tracks the latest commit
@@ -52,20 +52,18 @@ re-upload, no delete-then-reinstall.
 to the real top-level `<name>/SKILL.md` directories (never copies), rebuilt by
 `bin/build-marketplace.sh`. See "Adding a new skill" below.
 
-## What's here (67 skills)
+## What's here (51 skills)
 
 Naming convention: **`matt-*`** = from Matt Pocock's engineering-skills pack, **`tp-*`** =
-written by Thao. Unprefixed = third-party pack (SEO, design) or ambiguous origin (`find-skills`,
-see below).
+written by Thao. Unprefixed = third-party pack (SEO, design).
 
 | Category | Skills |
 |---|---|
 | SEO (31) | seo, seo-ahrefs, seo-audit, seo-backlinks, seo-bing, seo-cluster, seo-competitor-pages, seo-content, seo-content-brief, seo-dataforseo, seo-drift, seo-ecommerce, seo-firecrawl, seo-flow, seo-geo, seo-google, seo-hreflang, seo-image-gen, seo-images, seo-local, seo-maps, seo-page, seo-plan, seo-profound, seo-programmatic, seo-schema, seo-seranking, seo-sitemap, seo-sxo, seo-technical, seo-unlighthouse |
 | Design (3) | high-end-visual-design, image-to-code, excalidraw-diagram |
-| Matt Pocock pack, prefixed (13) | matt-code-review, matt-grill-me, matt-grill-with-docs, matt-handoff, matt-improve-codebase-architecture, matt-prototype, matt-research, matt-teach, matt-to-spec, matt-to-tickets, matt-triage, matt-wayfinder, matt-writing-great-skills |
+| Matt Pocock pack, prefixed (1) | matt-improve-codebase-architecture — the only one of the 13 still in regular use |
 | Matt Pocock pack, **left unprefixed on purpose** (6) | codebase-design, diagnosing-bugs, domain-modeling, grilling, implement, tdd — see note below |
-| Neither Matt nor Thao (1) | find-skills — documents the third-party `npx skills` CLI, not written by either |
-| Thao-authored, prefixed (13) | tp-building-automation-prompts, tp-caveman, tp-check-in, tp-close-clear, tp-codebase-walkthrough, tp-eli5, tp-import-lesson, tp-list-skills, tp-north-star, tp-start-strong, tp-todo, tp-update-brain, tp-youtube-transcript |
+| Thao-authored, prefixed (10) | tp-building-automation-prompts, tp-close-clear, tp-codebase-walkthrough, tp-eli5, tp-import-artifacts, tp-list-skills, tp-north-star, tp-start-strong, tp-update-brain, tp-youtube-transcript |
 
 ### Why 6 Matt-pack skills stay unprefixed
 
@@ -80,6 +78,13 @@ them here would silently break those. Leave these 6 bare.
   never committed here.
 - **`hive-*` skills** — owned by a separate private repo, with its own sync flow. Gitignored
   here, never tracked.
+- **17 skills cut 2026-08-31** after a usage review (mirrors the same cut in the private
+  `thao-skills` repo): 12 rarely-used Matt Pocock skills (kept `matt-improve-codebase-architecture`
+  — most of what was useful in the rest has been absorbed into the hive-flow workflow),
+  `tp-caveman` (superseded by `tp-eli5`), `tp-check-in` (redundant with `tp-close-clear` /
+  `tp-start-strong` / `tp-update-brain`), `find-skills` (redundant with `tp-list-skills`), and
+  `tp-todo`. `tp-import-lesson` was also cut then kept after all, renamed to `tp-import-artifacts`
+  to reflect a broader scope.
 
 ## Adding a new skill
 

@@ -1,9 +1,9 @@
 ---
-name: tp-import-lesson
-description: Import a lesson artifact (HTML, markdown/canvas, and related images) into the Thao-OS vault. Any dropped md or html file lands in `01-Worlds/life/05 - Views/` as the raw human view; a processed summary note is created in `01-Worlds/life/01 - Notes/`, and views/images are linked from the lesson index. Use when the user drops an md/html file, mentions adding a new lesson, uploads notes, a new class/session happened, or says "add the lesson" / "import lesson" for any course (weight loss, n8n, etc).
+name: tp-import-artifacts
+description: Import an artifact (a lesson, meeting export, or any HTML/markdown/canvas file plus related images) into the Thao-OS vault. Any dropped md or html file lands in `01-Worlds/life/05 - Views/` as the raw human view; a processed summary note is created in `01-Worlds/life/01 - Notes/`, and views/images are linked from the relevant index. Use when the user drops an md/html file, mentions adding a new lesson, uploads notes, a new class/session happened, or says "add the lesson" / "import lesson" / "import this artifact" for any course or source (weight loss, n8n, etc).
 ---
 
-# import-lesson
+# import-artifacts
 
 ## The rule (applies whenever the user drops an md or html file)
 
@@ -18,7 +18,7 @@ User provides: the file path(s) (md and/or html, plus any images), the course/no
 Run the script to move files, then create the summary note + update the index.
 
 ```bash
-python3 ~/.claude/skills/tp-import-lesson/scripts/import_lesson.py \
+python3 ~/.claude/skills/tp-import-artifacts/scripts/import_artifact.py \
   --md "/path/to/notes.md" \
   --html "/path/to/lesson.html" \
   --images "/path/img1.png" "/path/img2.png" \
@@ -84,7 +84,7 @@ next_review:
 
 All HTML and image artifacts live at `<vault>/01-Worlds/life/05 - Views/`, where `<vault>` is the
 Thao-OS vault root — `$THAO_OS_VAULT` if set, else the Google Drive desktop sync folder under
-`~/Library/CloudStorage/GoogleDrive-*/My Drive/Thao-OS`. See `scripts/import_lesson.py`.
+`~/Library/CloudStorage/GoogleDrive-*/My Drive/Thao-OS`. See `scripts/import_artifact.py`.
 
 Links in notes use relative path: `../05 - Views/filename.html`  
 Images use wikilink syntax: `![[filename.png]]`

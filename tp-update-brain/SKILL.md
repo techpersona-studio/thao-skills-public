@@ -65,9 +65,9 @@ Routing rules (condensed from the law):
 
 ## Phase 4: update today's daily note (main session, not dispatched)
 
-Routine and mechanical — same as how `/tp-check-in` already touches the daily note directly, no Opus dispatch needed:
+Routine and mechanical — no Opus dispatch needed:
 - Capture section: what got done, what was found, decisions made — one bullet per item, `prefix | text` (win/decision/blocked/learned/content), current time inline
-- Check off any Targets/Deep-Work items this conversation completed (timestamping rule: current time inline, per `/tp-check-in`)
+- Check off any Targets/Deep-Work items this conversation completed (timestamping rule: current time inline)
 - Don't duplicate world-level hot_cache detail verbatim — one line + a `[[wikilink]]` or pointer to the fuller entry
 
 ## Phase 5: receipt

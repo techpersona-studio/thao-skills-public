@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-import_lesson.py — move HTML + image files into Thao-OS life/05 - Views/
+import_artifact.py — move HTML + image files into Thao-OS life/05 - Views/
 and print the markdown snippets needed to update the lesson note.
 """
 

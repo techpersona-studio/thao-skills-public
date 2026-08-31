@@ -1,0 +1,15 @@
+# hive-* corpus is owned by hive-testbed (its own repo, own sync flow).
+# Present on disk here for the agents runtime to resolve, never tracked here.
+# No trailing slash: these are symlinks, and a symlink-to-a-directory doesn't
+# match a slash-terminated pattern in git's gitignore rules.
+hive-*
+hive-rules.mdc
+HIVE-SOURCE-OF-TRUTH.md
+
+.DS_Store
+
+# Google Drive desktop sync artifact, not mine, never track
+.tmp.driveupload/
+
+__pycache__/
+*.pyc

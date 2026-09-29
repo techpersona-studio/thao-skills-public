@@ -86,7 +86,7 @@ on the projects that need it:
 
 One plugin, `claude-seo`, bundles all 25 skills + 18 sub-agents. Always current, no maintenance
 on our end. If a repo needs this every session, add it to that repo's own `.claude/settings.json`
-under `extraKnownMarketplaces` (see `seo-os`'s for a working example) — that registers the
+under `extraKnownMarketplaces` — that registers the
 marketplace automatically without installing anything, so `/plugin install claude-seo@...` above
 is the only manual step left.
 

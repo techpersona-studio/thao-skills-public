@@ -35,7 +35,7 @@ Read in parallel, skip silently if missing:
 
 **If `--live`:**
 6. Open Jira issues — `search_jira_issues` with `assignee = currentUser() AND statusCategory != Done ORDER BY priority DESC`
-7. Calendar — `list-events` for today + next few days, BOTH `primary` AND Luma calendar (`mo7f6lts4rke57i2cfd9bgrsurer2o8f@import.calendar.google.com`)
+7. Calendar — `list-events` for today + next few days, BOTH `primary` AND your work calendar (`<work-calendar-id>`)
 
 Use the hook-injected current time to resolve "today", the current week number, and which deadlines are closing in.
 

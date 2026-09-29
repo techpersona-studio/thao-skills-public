@@ -74,7 +74,7 @@ Routine and mechanical — no Opus dispatch needed:
 
 One terse line, matching Vault Manager's own output contract:
 
-`brain: <what changed + where>` — e.g. `brain: logged decision to luma/hot_cache, updated CONTEXT §5, daily note Capture +2 lines`
+`brain: <what changed + where>` — e.g. `brain: logged decision to <world>/hot_cache, updated CONTEXT §5, daily note Capture +2 lines`
 
 If Phase 2 found nothing new: say so plainly — `brain: nothing new to file`. Don't manufacture an entry to look useful.
 

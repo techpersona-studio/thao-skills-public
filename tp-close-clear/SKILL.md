@@ -17,7 +17,7 @@ Read in parallel, skip silently if missing:
 
 1. Today's daily note — `01-Worlds/life/01 - Notes/YYYY-MM-DD - Daily Note.md`
 2. Today's health log — `01-Worlds/life/01 - Notes/YYYY-MM-DD - Health Log.md`
-3. Today's calendar — fetch from BOTH `primary` AND Luma calendar (`mo7f6lts4rke57i2cfd9bgrsurer2o8f@import.calendar.google.com`)
+3. Today's calendar — fetch from BOTH `primary` AND your work calendar (`<work-calendar-id>`)
 4. Short-term plan — `01-Worlds/life/01 - Notes/2026-05-27 - Short-Term Plan - AI Career Two-Track Strategy.md`
 5. Weekly note (goals + review in one) — `01-Worlds/life/01 - Notes/YYYY-Www - Weekly.md`
 
@@ -132,14 +132,14 @@ Rules:
 
 ```markdown
 # ❌ BAD: long packed line
-- **Shipped:** LP-15291 legal disclaimer merged, LP-15199 mockup data merged, LP-15150 T1 research ~70% done, BE specs agreed, n8n API setups done.
+- **Shipped:** TICKET-1 legal disclaimer merged, TICKET-2 mockup data merged, TICKET-3 T1 research ~70% done, BE specs agreed, n8n API setups done.
 
 # ✅ GOOD: sub-bullets when there are multiple items
 - **Shipped:**
-  - LP-15291 legal disclaimer merged
-  - LP-15199 mockup data merged
-  - LP-15150 T1 research ~70% (transport patterns, SSE, Postgres v1 locked)
-  - BE data specs agreed with Scott
+  - TICKET-1 legal disclaimer merged
+  - TICKET-2 mockup data merged
+  - TICKET-3 T1 research ~70% (transport patterns, SSE, Postgres v1 locked)
+  - BE data specs agreed with a teammate
   - n8n API setups + "Don't Use AI Agent Wrong" section done
 ```
 

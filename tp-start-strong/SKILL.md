@@ -32,7 +32,7 @@ Read in parallel, skip silently if missing:
 2. Short-term plan — `01-Worlds/life/01 - Notes/2026-05-27 - Short-Term Plan - AI Career Two-Track Strategy.md`
 3. Weekly note (goals + review in one) — `01-Worlds/life/01 - Notes/YYYY-Www - Weekly.md`
 4. Health/energy log — `01-Worlds/life/01 - Notes/YYYY-MM-DD - Health Log.md`
-5. Calendar for target day — fetch from BOTH `primary` AND Luma calendar (`mo7f6lts4rke57i2cfd9bgrsurer2o8f@import.calendar.google.com`)
+5. Calendar for target day — fetch from BOTH `primary` AND your work calendar (`<work-calendar-id>`)
 6. Daily note template — `04 - System/Templates/Daily Note Template.md`
 7. Yesterday's daily note — for carryover and auto-tracking
 8. Notes explicitly linked from the daily note or short-term plan (not open-ended vault search)

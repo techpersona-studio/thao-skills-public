@@ -14,7 +14,7 @@ Group inventory of skills, not the flat `/skills` dialog. Shows category, origin
 Count real invocations from session transcripts. Run:
 
 ```bash
-cd ~/.claude/projects/-Users-thao-phuong-Desktop-Life-OS/
+cd ~/.claude/projects/<project-dir>/
 # Skill-tool invocations + slash-command invocations, combined
 { grep -rhoE '"skill":"[a-z0-9-]+"' *.jsonl 2>/dev/null | sed 's/"skill":"//;s/"//';
   grep -rhoE '<command-name>/[a-z0-9-]+' *.jsonl 2>/dev/null | sed 's|<command-name>/||'; } \
@@ -24,7 +24,7 @@ cd ~/.claude/projects/-Users-thao-phuong-Desktop-Life-OS/
 Also get recency (last-used) — most recent transcript mentioning each skill wins ordering ties:
 
 ```bash
-cd ~/.claude/projects/-Users-thao-phuong-Desktop-Life-OS/
+cd ~/.claude/projects/<project-dir>/
 for f in $(ls -t *.jsonl); do grep -loE '"skill":"[a-z0-9-]+"|<command-name>/[a-z0-9-]+' "$f"; done >/dev/null
 ```
 
@@ -43,10 +43,10 @@ Read the available-skills list in context to resolve namespaces. Check `~/.claud
 
 Bucket every skill. Categories (Thao-confirmed):
 
-- **Orchestration / planning** — start-strong, north-star, check-in, close-clear, grill-me, brainstorming, writing-plans, executing-plans, handoff
-- **Developing / coding** — implement-jira-ticket, tdd, frontend-design, prototype, claude-api, grill-with-docs, todo, to-prd, to-issues, subagent-driven-development, dispatching-parallel-agents, using-git-worktrees
-- **Debugging / review** — diagnose, systematic-debugging, code-review, code-review-jira-ticket, review, security-review, simplify, verify, verification-before-completion, receiving-code-review, requesting-code-review, improve-codebase-architecture, finishing-a-development-branch
-- **Knowledge / vault** — import-lesson, youtube-transcript, deep-research
+- **Orchestration / planning** — start-strong, north-star, close-clear, brainstorming, writing-plans, executing-plans
+- **Developing / coding** — implement-jira-ticket, tdd, frontend-design, claude-api, to-prd, to-issues, subagent-driven-development, dispatching-parallel-agents, using-git-worktrees
+- **Debugging / review** — diagnose, systematic-debugging, code-review, review, security-review, simplify, verify, verification-before-completion, receiving-code-review, requesting-code-review, improve-codebase-architecture, finishing-a-development-branch
+- **Knowledge / vault** — import-artifacts, youtube-transcript, deep-research
 - **Integrations** — all Notion:*, all slack:*
 - **Meta / config** — write-a-skill, list-skills, update-config, keybindings-help, loop, run, init, fewer-permission-prompts, using-superpowers, writing-skills
 

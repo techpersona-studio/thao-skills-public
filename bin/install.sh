@@ -26,6 +26,12 @@ for tool in "${!TARGETS[@]}"; do
     echo "skip $tool: $parent not found, doesn't look installed on this machine"
     continue
   fi
+  # A tool dir that is itself a symlink (e.g. ~/.claude/skills -> ~/.agents/skills) is already
+  # wired; per-skill links inside it would land in whatever it points at.
+  if [ -L "$target" ]; then
+    echo "skip $tool: $target is itself a symlink -> $(readlink "$target")"
+    continue
+  fi
   mkdir -p "$target"
   count=0
   for dir in "$REPO_DIR"/*/; do
@@ -35,8 +41,11 @@ for tool in "${!TARGETS[@]}"; do
     esac
     [ -f "$dir/SKILL.md" ] || continue
     link="$target/$name"
-    if [ -L "$link" ] || [ -e "$link" ]; then
-      rm -rf "$link"
+    if [ -L "$link" ]; then
+      rm -f "$link"
+    elif [ -e "$link" ]; then
+      echo "warning: $link exists and is not a symlink - leaving it alone" >&2
+      continue
     fi
     ln -s "$dir" "$link"
     count=$((count + 1))

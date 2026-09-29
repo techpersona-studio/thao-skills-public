@@ -1,7 +1,7 @@
 # thao-skills-public
 
 Thao's Claude Code / agent skills — the shareable subset. This is the public counterpart to a
-private `thao-skills` repo; work-specific tooling (a private employer's Jira ticket conventions,
+private repo; work-specific tooling (a private employer's Jira ticket conventions,
 CI bot, internal repo bootstrap scripts) stays out of this one entirely, by construction — it was
 never committed here, not redacted after the fact.
 
@@ -20,44 +20,75 @@ skills should symlink from here too, not copy — one source, no drift.
 See [INSTRUCTIONS.md](./INSTRUCTIONS.md) for a ready-to-paste agent prompt that does the above
 on a fresh machine.
 
-## Plugin marketplace (Claude Code only, local + cloud + coworkers)
+## Plugin marketplace (laptop, desktop app, IDE; not cloud sessions)
 
 This repo is also a Claude Code [plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces)
-(`.claude-plugin/marketplace.json`), so it can reach Claude Code sessions — yours or a
-coworker's, local or cloud — without the manual "zip it, upload it to claude.ai, delete the old
-one" cycle. Anyone can:
+(`.claude-plugin/marketplace.json`). Anyone can:
 
 ```
 /plugin marketplace add techpersona-studio/thao-skills-public
 /plugin install tp-skill@thao-skills-public
+/plugin install engineering-skills@thao-skills-public    # optional
 ```
 
-Only `tp-skill` is meant to auto-load on every session (see the SessionStart hook in
-`.claude/settings.json` of this and other repos). `engineering-skills` is opt-in — install it
-separately when a project actually needs it:
+Skills then appear as `/tp-skill:tp-start-strong`. Cloud sessions cannot use this route (next
+section). All 14 skills are grouped into 2 plugins:
 
-```
-/plugin install engineering-skills@thao-skills-public
-```
-
-All 14 skills are grouped into 2 plugins (so invocation is `/tp-skill:tp-start-strong`, not one
-plugin per skill):
-
-| Plugin | Skills | Auto-loads? |
-|---|---|---|
-| `tp-skill` | Thao's personal `tp-*` skills (daily planning, close-clear, strategic zoom-outs, communication style, etc.) — the referenced Google Drive vault paths are Thao's, not yours | **Yes**, via SessionStart hook |
-| `engineering-skills` | `matt-improve-codebase-architecture`, plus design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`) | No — opt-in |
+| Plugin | Skills |
+|---|---|
+| `tp-skill` | Thao's personal `tp-*` skills (daily planning, close-clear, strategic zoom-outs, communication style, etc.) — the referenced Google Drive vault paths are Thao's, not yours |
+| `engineering-skills` | `matt-improve-codebase-architecture`, plus design (`high-end-visual-design`, `image-to-code`, `excalidraw-diagram`) |
 
 **No SEO plugin here** — see "SEO skills" below for why, and what to install instead.
 
-No `version` field is set anywhere in the marketplace, so Claude Code tracks the latest commit
-SHA on `main` automatically — edit a skill, commit, push, and every session that already has the
-plugin installed (local or cloud) picks it up on next use / `/plugin marketplace update`. No
-re-upload, no delete-then-reinstall.
+No `version` field is set in the marketplace, so Claude Code tracks the latest commit on `main`.
+But auto-update is off by default for third-party marketplaces like this one. Turn it on in
+`/plugin` → Marketplaces, or update by hand and reload:
+
+```
+claude plugin marketplace update thao-skills-public && claude plugin update tp-skill@thao-skills-public
+/reload-plugins        # inside a session that is already open
+```
 
 **These 2 plugins are generated, not hand-maintained** — `plugins/*/skills/*` are symlinks back
 to the real top-level `<name>/SKILL.md` directories (never copies), rebuilt by
 `bin/build-marketplace.sh`. See "Adding a new skill" below.
+
+## Cloud agents (Claude Code on the web)
+
+What a cloud session does, per Claude Code's docs: it has no `/plugin`, it does not load plugins or
+marketplaces named in a repo's `.claude/settings.json`, and it does not carry over the skills in
+your laptop's `~/.claude/skills`. It does run a repo's SessionStart hooks (in a session with one
+repository) and it reads skills from `~/.claude/skills`.
+
+So the plugin route above is for laptops. For cloud, this repo ships a hook: `.claude/settings.json`
+runs `scripts/ensure-cloud-skills.sh` when a session starts. In a cloud session
+(`CLAUDE_CODE_REMOTE=true`) it clones this repo, runs `bin/install.sh` (links every skill into
+`~/.claude/skills`) and returns `reloadSkills`, so Claude Code re-scans in the same session. On a
+laptop it does nothing. A cloud VM is fresh each time, so every session gets the latest `main`.
+
+Checked: the script's steps and output (no-op on a laptop, valid JSON on stdout, safe when the
+network fails). Not checked: a live cloud session end to end. To confirm, start a session on this
+repo and run `/tp-eli5`.
+
+To get the same in another repo, copy the two files (`.claude/settings.json` and
+`scripts/ensure-cloud-skills.sh`) keeping their paths, and merge into an existing
+`.claude/settings.json` instead of overwriting it. Repo hooks are read in sessions with one
+repository only, not in multi-repository sessions or project threads. The other route is the
+environment's Setup script (claude.ai/code, environment settings), which runs before Claude Code
+starts; the same clone and `bin/install.sh` steps fit there, but its user and home directory have
+not been checked.
+
+**What is useful in a cloud session.** The `tp-*` skills were written around Thao's own notes
+vault, folders a cloud VM does not have:
+
+| Works anywhere | Needs the notes vault on disk |
+|---|---|
+| `tp-eli5`, `tp-codebase-walkthrough`, `tp-building-automation-prompts`¹, `tp-list-skills`, `high-end-visual-design`, `image-to-code`, `matt-improve-codebase-architecture`¹, `excalidraw-diagram`² | `tp-start-strong`, `tp-close-clear`, `tp-north-star`, `tp-update-brain`, `tp-import-artifacts`, `tp-youtube-transcript` (which also needs `yt-dlp`) |
+
+¹ Manual only: `disable-model-invocation` is on, so a human has to type the slash command.
+² Needs `uv` and a Playwright Chromium, and its instructions assume a project-local
+`.claude/skills/excalidraw-diagram` folder. Treat it as laptop-only.
 
 ## What's here (14 skills)
 
@@ -73,38 +104,33 @@ written by Thao. Unprefixed = third-party pack (design).
 ### SEO skills
 
 Not vendored here (removed 2026-08-31). The 31 `seo-*` skills this repo used to carry were a
-copy of [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) (MIT), pinned to an
-already-stale version (v2.2.0 vs. their current v2.2.5) that we'd have to keep manually updating.
-SEO is also project-specific, not something every session needs — so instead of paying its
-context cost (~4.4k tokens, always-on) on every session, install it directly from the source only
-on the projects that need it:
+stale pinned copy of [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) (MIT)
+that would need manual updating. SEO is also project-specific: the plugin lists about 26 skills and
+19 sub-agents in every session where it is installed. So install it from the source, and only for
+the projects that need it:
 
 ```
-/plugin marketplace add AgriciDaniel/claude-seo
-/plugin install claude-seo@agricidaniel-claude-seo
+claude plugin marketplace add AgriciDaniel/claude-seo
+claude plugin install claude-seo@agricidaniel-claude-seo --scope project
 ```
 
-One plugin, `claude-seo`, bundles all 25 skills + 18 sub-agents. Always current, no maintenance
-on our end. If a repo needs this every session, add it to that repo's own `.claude/settings.json`
-under `extraKnownMarketplaces` — that registers the
-marketplace automatically without installing anything, so `/plugin install claude-seo@...` above
-is the only manual step left.
+Scopes: `user` (the default) is every project on your machine; `project` records it in the repo's
+shared `.claude/settings.json`; `local` is just you, in this repo (`.claude/settings.local.json`).
+Inside a session, `/plugin install` opens a panel where you pick the scope instead. Always
+current, no maintenance on our end.
 
 ## What's NOT here
 
 - **Work-specific tooling** — anything tied to a private employer's Jira ticket conventions, CI
-  bot, or internal repo bootstrap scripts. Lives only in the private `thao-skills` repo, and was
+  bot, or internal repo bootstrap scripts. Lives only in the private repo, and was
   never committed here.
 - **`hive-*` skills** — owned by a separate private repo, with its own sync flow. Gitignored
   here, never tracked.
 - **The 6 unprefixed Matt-pack skills** (`codebase-design`, `diagnosing-bugs`, `domain-modeling`,
-  `grilling`, `implement`, `tdd`), removed 2026-08-31 — turns out `hive-testbed`'s own skills
-  don't vendor these themselves; they depend on the *private* `thao-skills` repo supplying them
-  locally (`hive-builder` wraps `/tdd`, `hive-architect` calls `/grilling` + `/domain-modeling`,
-  etc.). That dependency lives only on your machine via the private repo's local install, so there
-  was no reason to carry copies here too. Kept in `thao-skills`, not archived.
+  `grilling`, `implement`, `tdd`), removed 2026-08-31. They exist only because the private hive
+  skills call them by bare name, so they are kept in the private repo and not carried here.
 - **17 skills cut 2026-08-31** after a usage review (mirrors the same cut in the private
-  `thao-skills` repo): 12 rarely-used Matt Pocock skills (kept `matt-improve-codebase-architecture`
+  repo): 12 rarely-used Matt Pocock skills (kept `matt-improve-codebase-architecture`
   — most of what was useful in the rest has been absorbed into the hive-flow workflow),
   `tp-caveman` (superseded by `tp-eli5`), `tp-check-in` (redundant with `tp-close-clear` /
   `tp-start-strong` / `tp-update-brain`), `find-skills` (redundant with `tp-list-skills`), and
@@ -117,11 +143,11 @@ is the only manual step left.
 Drop a `<name>/SKILL.md` directory in here, then run both:
 
 - `bin/install.sh` — picks it up in `~/.claude/skills` (and Codex/Cursor) on this machine.
-- `bin/build-marketplace.sh` — regenerates `plugins/*/skills/*` so it's included in the plugin
+- `bin/build-marketplace.sh` (needs bash 4+; on macOS use Homebrew's bash) — regenerates `plugins/*/skills/*` so it's included in the plugin
   marketplace (see above). Classifies by prefix (`tp-*`, or the 4 named `engineering-skills`
   members); a name it doesn't recognize prints a warning instead of silently dropping it. `seo-*`
   is a deliberate no-op — see "SEO skills" above.
 
 Commit and push both the new skill and the regenerated `plugins/` directory.
 
-**Before adding anything work-specific, don't — that's what the private `thao-skills` repo is for.**
+**Before adding anything work-specific, don't — that's what the private repo is for.**

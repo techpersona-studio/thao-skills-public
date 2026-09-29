@@ -1,4 +1,4 @@
-# hive-* corpus is owned by hive-testbed (its own repo, own sync flow).
+# hive-* corpus is owned by a separate private repo (its own sync flow).
 # Present on disk here for the agents runtime to resolve, never tracked here.
 # No trailing slash: these are symlinks, and a symlink-to-a-directory doesn't
 # match a slash-terminated pattern in git's gitignore rules.

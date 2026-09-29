@@ -1,26 +1,24 @@
 #!/usr/bin/env bash
 # Symlinks every skill in this repo into whichever of Claude Code / Codex / Cursor
-# are actually set up on this machine. Run after cloning this repo to ~/.agents/skills.
+# are actually set up on this machine. Run after cloning this repo (for example to ~/.agents/skills-public).
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-if [ "$REPO_DIR" != "$HOME/.agents/skills" ]; then
-  echo "warning: this repo is not at ~/.agents/skills (found at $REPO_DIR)." >&2
-  echo "the symlinks below will still point at $REPO_DIR, but other tooling" >&2
-  echo "(hive-dispatch, \$SKILLS_DIR references) may expect ~/.agents/skills." >&2
-fi
+echo "installing from $REPO_DIR (the symlinks below point there)"
 
 # name -> target dir. Only linked if the tool's own config dir already exists,
 # so this never scaffolds a directory for a tool that isn't installed here.
-declare -A TARGETS=(
-  [Claude]="$HOME/.claude/skills"
-  [Codex]="$HOME/.codex/skills"
-  [Cursor]="$HOME/.cursor/skills-cursor"
+# (Plain arrays, not an associative array: macOS ships bash 3.2, which has no `declare -A`.)
+TARGETS=(
+  "Claude|$HOME/.claude/skills"
+  "Codex|$HOME/.codex/skills"
+  "Cursor|$HOME/.cursor/skills-cursor"
 )
 
-for tool in "${!TARGETS[@]}"; do
-  target="${TARGETS[$tool]}"
+for entry in "${TARGETS[@]}"; do
+  tool="${entry%%|*}"
+  target="${entry#*|}"
   parent="$(dirname "$target")"
   if [ ! -d "$parent" ]; then
     echo "skip $tool: $parent not found, doesn't look installed on this machine"
@@ -37,11 +35,13 @@ for tool in "${!TARGETS[@]}"; do
   for dir in "$REPO_DIR"/*/; do
     name="$(basename "$dir")"
     case "$name" in
-      hive-*) continue ;;  # owned by hive-testbed, not this repo
+      hive-*) continue ;;  # owned by a separate private repo, not this one
     esac
     [ -f "$dir/SKILL.md" ] || continue
     link="$target/$name"
     if [ -L "$link" ]; then
+      old="$(readlink "$link")"
+      [ "$old" = "$dir" ] || echo "replaced $link (was -> $old)"
       rm -f "$link"
     elif [ -e "$link" ]; then
       echo "warning: $link exists and is not a symlink - leaving it alone" >&2
@@ -53,4 +53,4 @@ for tool in "${!TARGETS[@]}"; do
   echo "linked $count skills into $target ($tool)"
 done
 
-echo "note: hive-* skills are NOT part of this repo (owned by hive-testbed) and are not linked anywhere by this script."
+echo "note: hive-* skills are NOT part of this repo (owned by a separate private repo) and are not linked anywhere by this script."

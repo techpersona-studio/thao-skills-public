@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR\"/scripts/ensure-thao-skills-marketplace.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/scripts/ensure-cloud-skills.sh"
           }
         ]
       }
